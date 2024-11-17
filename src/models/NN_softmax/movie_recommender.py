@@ -1,12 +1,14 @@
+from pprint import pprint
 import tensorflow as tf
 from tensorflow import keras
 from typing import Tuple
 import numpy as np
 
 class MovieRecommenderModel:
-    def __init__(self, n_users: int, n_movies: int, n_factors: int = 150):
+    def __init__(self, n_users: int, n_movies: int, refind_df, n_factors: int = 150):
         self.n_users = n_users
         self.n_movies = n_movies
+        self.refined_dataset = refind_df
         self.n_factors = n_factors
         self.model = self.build_model()
 
@@ -77,7 +79,7 @@ class MovieRecommenderModel:
 
         # Model checkpoint
         checkpoint = keras.callbacks.ModelCheckpoint(
-            filepath='best_model.keras',
+            filepath='movie_recommend_dd_softmax.keras',
             monitor='val_loss',
             save_best_only=True,
             mode='min',
@@ -97,3 +99,23 @@ class MovieRecommenderModel:
         )
 
         return history
+    
+    def recommender_movie_system(self, user_id, n_movies = 10):
+        print("")
+        print("Movie seen by the User:")
+        pprint(list(self.refined_dataset[self.refined_dataset['user id'] == user_id]['movie title']))
+        print("")
+        model = self.model
+        encoded_user_id = self.user_enc.transform([user_id])
+
+        seen_movies = list(self.refined_dataset[self.refined_dataset['user id'] == user_id]['movie'])
+        unseen_movies = [i for i in range(min(self.refined_dataset['movie']), max(self.refined_dataset['movie'])+1) if i not in seen_movies]
+        model_input = [np.asarray(list(encoded_user_id)*len(unseen_movies)), np.asarray(unseen_movies)]
+        predicted_ratings = model.predict(model_input)
+        predicted_ratings = np.max(predicted_ratings, axis=1)
+        sorted_index = np.argsort(predicted_ratings)[::-1]
+        recommended_movies = self.movie_enc.inverse_transform(sorted_index)
+        print("---------------------------------------------------------------------------------")
+        print("Top "+str(n_movies)+" Movie recommendations for the User "+str(user_id)+ " are:")
+        pprint(list(recommended_movies[:n_movies]))
+        return list(recommended_movies[:n_movies])
