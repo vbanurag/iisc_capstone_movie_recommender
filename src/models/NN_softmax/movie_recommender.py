@@ -1,14 +1,19 @@
+from pprint import pprint
+from sklearn.calibration import LabelEncoder
 import tensorflow as tf
 from tensorflow import keras
 from typing import Tuple
 import numpy as np
 
 class MovieRecommenderModel:
-    def __init__(self, n_users: int, n_movies: int, n_factors: int = 150):
+    def __init__(self, n_users: int, n_movies: int, refind_df, user_enc, movie_enc, n_factors: int = 150):
         self.n_users = n_users
         self.n_movies = n_movies
+        self.refined_dataset = refind_df
         self.n_factors = n_factors
         self.model = self.build_model()
+        self.user_enc = user_enc
+        self.movie_enc = movie_enc
 
     def build_model(self) -> keras.Model:
         """Build the neural network architecture"""
@@ -60,8 +65,8 @@ class MovieRecommenderModel:
         
         return model
 
-    def train(self, X_train: Tuple, y_train: np.ndarray, 
-              X_val: Tuple, y_val: np.ndarray, 
+    def train(self, X_train_array: Tuple, y_train: np.ndarray, 
+              X_test_array: Tuple,  Y_test: np.ndarray, 
               epochs: int = 80, batch_size: int = 128) -> keras.callbacks.History:
         """Train the model with callbacks for early stopping and checkpointing"""
         
@@ -77,7 +82,7 @@ class MovieRecommenderModel:
 
         # Model checkpoint
         checkpoint = keras.callbacks.ModelCheckpoint(
-            filepath='best_model.keras',
+            filepath='movie_recommend_dd_softmax.keras',
             monitor='val_loss',
             save_best_only=True,
             mode='min',
@@ -86,14 +91,31 @@ class MovieRecommenderModel:
 
         # Train the model
         history = self.model.fit(
-            x=X_train,
+            x=X_train_array,
             y=y_train,
             batch_size=batch_size,
             epochs=epochs,
             verbose=1,
-            validation_data=(X_val, y_val),
+            validation_data=(X_test_array, Y_test),
             shuffle=True,
             callbacks=[reduce_lr, checkpoint]
         )
 
         return history
+    
+    def recommender_movie_system(self, user_id, n_movies = 10):
+        print("")
+        print("Movie seen by the User:")
+        pprint(list(self.refined_dataset[self.refined_dataset['user id'] == user_id]['movie title']))
+        print("")
+        model = self.model
+        encoded_user_id = self.user_enc.transform([user_id])
+
+        seen_movies = list(self.refined_dataset[self.refined_dataset['user id'] == user_id]['movie'])
+        unseen_movies = [i for i in range(min(self.refined_dataset['movie']), max(self.refined_dataset['movie'])+1) if i not in seen_movies]
+        model_input = [np.asarray(list(encoded_user_id)*len(unseen_movies)), np.asarray(unseen_movies)]
+        predicted_ratings = model.predict(model_input)
+        predicted_ratings = np.max(predicted_ratings, axis=1)
+        sorted_index = np.argsort(predicted_ratings)[::-1]
+        recommended_movies = self.movie_enc.inverse_transform(sorted_index)
+        return list(recommended_movies[:n_movies])

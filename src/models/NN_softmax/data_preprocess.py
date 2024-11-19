@@ -1,3 +1,4 @@
+from pprint import pprint
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -53,7 +54,7 @@ class MovieDataProcessor:
             'max_rating': refined_df['rating'].max()
         }
 
-        return refined_df, metadata
+        return refined_df, metadata, self.user_enc, self.movie_enc
 
     def prepare_training_data(self, refined_df: pd.DataFrame, test_size: float = 0.1
                             ) -> Tuple[Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
@@ -77,4 +78,4 @@ class MovieDataProcessor:
         X_train_array = [X_train[:, 0], X_train[:, 1]]
         X_test_array = [X_test[:, 0], X_test[:, 1]]
 
-        return (X_train_array, y_train), (X_test_array, y_test)
+        return X_train_array, y_train, X_test_array, y_test
