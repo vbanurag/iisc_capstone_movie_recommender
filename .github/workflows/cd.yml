@@ -21,21 +21,20 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # Step 3: Set up Docker Compose
-    - name: Set up Docker Compose
-      uses: docker/compose-action@v2
+    # Step 3: Set up Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-    # Step 4: Build the services using Docker Compose
+    # Step 4: Install Docker Compose
+    - name: Install Docker Compose
+      run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+    # Step 5: Build the services using Docker Compose
     - name: Build Docker Compose Services
-      run: docker compose -f docker-compose.yml build
+      run: docker-compose -f docker-compose.yml build
 
-    # Step 5: Push the Docker image
-    - name: Push Docker Image
-      run: |
-        docker tag my-python-app <your-repo>/my-python-app:latest
-        docker push <your-repo>/my-python-app:latest
-
-    # Optional: Deploy to Kubernetes or another service
-    # Uncomment and customize based on your deployment needs
-    # - name: Deploy to Kubernetes
-    #   run: kubectl apply -f k8s/deployment.yaml
+    # Step 6: Tag and Push the Docker Image
+    # - name: Push Docker Image
+    #   run: |
+    #     docker tag my-python-app <your-repo>/my-python-app:latest
+    #     docker push <your-repo>/my-python-app:latest
