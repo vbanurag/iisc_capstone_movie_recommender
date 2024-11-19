@@ -7,12 +7,12 @@ def main():
     # collabMovie.recommended_movies(78)
     # collabMovie.recommend_movies_user('Absolute Power (1997)')
 
-    softmax_dd = MovieRecommendDD()
-    softmax_dd.load_data()
-    softmax_dd.process_data()
-    softmax_dd.prepare_model()
-    softmax_dd.get_movie_recommendations(45)
-    
+    # softmax_dd = MovieRecommendDD()
+    # softmax_dd.load_data()
+    # softmax_dd.process_data()
+    # softmax_dd.prepare_model()
+    # softmax_dd.get_movie_recommendations(45)
+    print('----Movie Recommendation System--------')
 
 if __name__ == "__main__":
     main()

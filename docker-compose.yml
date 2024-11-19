@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movie-recommender-system
+    volumes:
+      - ./data:/app/data  # Map local `data` folder to container
+    command: python src/main.py
