@@ -1,3 +1,44 @@
+# Movie Recommendation Engine
+
+A machine learning-based recommendation system using the MovieLens 100K dataset, implementing multiple recommendation approaches.
+
+## Overview
+
+This project implements three different recommendation algorithms:
+- Collaborative Filtering using K-Nearest Neighbors
+- Softmax Decomposition-Discovery (DD)
+- Content-Based Filtering using Cosine Similarity
+
+## Dataset
+
+MovieLens 100K dataset containing:
+- 100,000 ratings (1-5) from 943 users on 1,682 movies
+- Movie metadata including title, genre, release date
+- User demographic information
+`
+
+## Implementation Details
+
+### Collaborative Filtering (KNN)
+- User-based approach using k-nearest neighbors
+- K-value optimized through cross-validation
+
+### Softmax DD
+- Learns latent factors for users and items
+- Incorporates user and item biases
+
+### Content-Based Filtering
+- Feature extraction from movie metadata
+- TF-IDF vectorization for movie descriptions
+- Cosine similarity for recommendations
+
+
+## Evaluation Metrics
+
+- Mean Absolute Error (MAE)
+- Root Mean Square Error (RMSE)
+
+
 
 # Setting Up Virtual Environments
 
