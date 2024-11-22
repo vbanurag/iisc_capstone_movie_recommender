@@ -1,5 +1,6 @@
 # Movie Recommendation Engine
 
+
 A machine learning-based recommendation system using the MovieLens 100K dataset and KMDB 5000 dataset implementing multiple recommendation approaches.
 
 ## Overview
@@ -19,7 +20,6 @@ MovieLens 100K dataset containing:
 KMDB 5000 dataset containing:
 - 4804 movies with 23 input features inlcuding overview, genres, cast, crew, ratings
 
-
 ## Implementation Details
 
 ### Collaborative Filtering (KNN)
@@ -35,6 +35,7 @@ KMDB 5000 dataset containing:
 - TF-IDF vectorization for movie descriptions
 - Cosine similarity for recommendations
 - Jaccard Similarity for model validation using internet data
+
 
 
 ## Evaluation Metrics
@@ -109,3 +110,14 @@ If `pyenv` is installed on your system, you can also set up your environment usi
    ```
 
 ---
+
+
+## Dataset and Implementation Details Of NLP Methord
+
+This project implements three different recommendation algorithms:
+- Dataset Used: TMDB 5000 Movies Dataset.
+- Embedding with Universal Sentence Encoder: Movie overviews are transformed into embeddings using the Universal Sentence Encoder model.
+- Dimensionality Reduction with PCA: The high-dimensional embeddings are reduced to 2D for better visualization.
+- Visualization: The reduced embedding space is plotted using Matplotlib to provide an intuitive view.
+- Recommendation Implementation: The Nearest Neighbors algorithm is employed to recommend similar movies based on the generated embeddings.
+
