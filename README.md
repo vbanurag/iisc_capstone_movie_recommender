@@ -104,3 +104,14 @@ If `pyenv` is installed on your system, you can also set up your environment usi
    ```
 
 ---
+
+
+## Dataset and Implementation Details Of NLP Methord
+
+This project implements three different recommendation algorithms:
+- Dataset Used: TMDB 5000 Movies Dataset.
+- Embedding with Universal Sentence Encoder: Movie overviews are transformed into embeddings using the Universal Sentence Encoder model.
+- Dimensionality Reduction with PCA: The high-dimensional embeddings are reduced to 2D for better visualization.
+- Visualization: The reduced embedding space is plotted using Matplotlib to provide an intuitive view.
+- Recommendation Implementation: The Nearest Neighbors algorithm is employed to recommend similar movies based on the generated embeddings.
+
