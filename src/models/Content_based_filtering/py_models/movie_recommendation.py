@@ -65,15 +65,21 @@ def get_recommendations(title,len_recommended_movies , cosine_sim2):
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
    
     sim_scores = sim_scores[1:len_recommended_movies+1]
-  
     movie_indices = [i[0] for i in sim_scores]
+    
     tags=[]
     for i in range(len_recommended_movies):
         
         tags.append(movies_sel['title'].iloc[movie_indices[i]])
     # Return the topmost similar movies
     movies_recommended= movies_sel['title'].iloc[movie_indices]
-
+    
+    sim_scores_val= 10*np.log10([i[1] for i in sim_scores])
+    plt.bar(tags,sim_scores_val)
+    plt.xlabel("Movie names")
+    plt.ylabel("10log(Similarity scores)")
+    plt.title(f"Similarity scores for movie : %s" %str(title).capitalize())
+    plt.show()
     return     tags
 
 
@@ -106,9 +112,10 @@ def get_movies_from_tastedive(movie_name,num_recommended_movies):
 
 
 def recommended_movies():
+    Accuracy=[]
     #movie_name=input('Suggest a English movie name: ')
     num_recommended_movies=5
-    for movie_name in ['Quantum of Solace', 'Harry Potter and the chamber of secrets','The Dark knight','Toy Story','The Avengers','Titanic','Avatar']:
+    for movie_name in ['Quantum of Solace', 'Harry Potter and the chamber of secrets','The Dark knight','Toy Story','The Avengers','Titanic','Avatar','The Theory of Everything','I, Robot', 'The Silence of the Lambs' ]:
         if not movie_name:
             print('Model Recommendation')
             print((q_movies[['title']].head(10)))
@@ -118,18 +125,19 @@ def recommended_movies():
             else:
                 print('Sorry, we do not have this in our database.')
                 return 
-            Benchmark_recommendation = get_movies_from_tastedive(movie_name.lower(),num_recommended_movies)
+            Benchmark_recommendation = get_movies_from_tastedive(movie_name.lower(),2*num_recommended_movies)
 
-            #print(recommendation.len())
-            Model_recommendation=get_recommendations(movie_name.lower(),len(Benchmark_recommendation),cosine_sim)
+            #print(movie_name)
+            #Model_recommendation=get_recommendations(movie_name.lower(),len(Benchmark_recommendation),cosine_sim)
             cosine_sim3=get_cosine_sim3()
             #cosine_sim2=get_cosine_sim2()
             #Model_recommendation2=get_recommendations(movie_name.lower(),len(Benchmark_recommendation),cosine_sim+cosine_sim2)
-            Model_recommendation3=get_recommendations(movie_name.lower(),len(Benchmark_recommendation),cosine_sim+cosine_sim3)
-            Accuracy=jaccard_set(Benchmark_recommendation,Model_recommendation)
+            Model_recommendation3=get_recommendations(movie_name.lower(),num_recommended_movies,cosine_sim+cosine_sim3)
+            #print(Model_recommendation3)
+            #Accuracy=jaccard_set(Benchmark_recommendation,Model_recommendation)
             #Accuracy2=jaccard_set(Benchmark_recommendation,Model_recommendation2)
-            Accuracy3=jaccard_set(Benchmark_recommendation,Model_recommendation3)
+            Accuracy.append(jaccard_set(Benchmark_recommendation,Model_recommendation3))
             
-            print(Accuracy3)
+    print(np.mean(Accuracy))
             
 recommended_movies()

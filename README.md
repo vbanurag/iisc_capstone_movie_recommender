@@ -1,6 +1,7 @@
 # Movie Recommendation Engine
 
-A machine learning-based recommendation system using the MovieLens 100K dataset, implementing multiple recommendation approaches.
+
+A machine learning-based recommendation system using the MovieLens 100K dataset and KMDB 5000 dataset implementing multiple recommendation approaches.
 
 ## Overview
 
@@ -15,7 +16,9 @@ MovieLens 100K dataset containing:
 - 100,000 ratings (1-5) from 943 users on 1,682 movies
 - Movie metadata including title, genre, release date
 - User demographic information
-`
+
+KMDB 5000 dataset containing:
+- 4804 movies with 23 input features inlcuding overview, genres, cast, crew, ratings
 
 ## Implementation Details
 
@@ -31,12 +34,15 @@ MovieLens 100K dataset containing:
 - Feature extraction from movie metadata
 - TF-IDF vectorization for movie descriptions
 - Cosine similarity for recommendations
+- Jaccard Similarity for model validation using internet data
+
 
 
 ## Evaluation Metrics
 
 - Mean Absolute Error (MAE)
 - Root Mean Square Error (RMSE)
+- Jaccard Similarity
 
 
 

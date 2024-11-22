@@ -15,7 +15,7 @@ movies = pd.read_csv("tmdb/tmdb-movie-metadata/versions/2/tmdb_5000_movies.csv")
 
 credits = pd.read_csv("tmdb/tmdb-movie-metadata/versions/2/tmdb_5000_credits.csv")
 movies=movies.merge(credits,on='title')
-movies_sel=movies[[ 'id','genres', 'keywords', 'title', 'overview', 'cast', 'crew','vote_average']]
+movies_sel=movies[[ 'id','genres', 'keywords', 'title', 'overview', 'cast', 'crew','vote_average','production_companies']]
 movies_sel['english_language']=movies['original_language']=='en'
 movies.dropna(inplace=True)
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -26,7 +26,7 @@ movies_sel['overview']=movies_sel['overview'].apply(lambda x:x.split())
 import ast
 from ast import literal_eval
 
-features = ['cast', 'crew', 'keywords', 'genres']
+features = ['cast', 'crew', 'keywords', 'genres','production_companies']
 for feature in features:
     movies_sel[feature] = movies_sel[feature].apply(literal_eval)
 def convert5(obj):
@@ -79,14 +79,15 @@ movies_sel['cast']=movies['cast'].apply(convert5)
 movies_sel['genres']=movies['genres'].apply(convert)
 
 movies_sel['keywords']=movies['keywords'].apply(convert)
+movies_sel['production_companies']=movies['production_companies'].apply(convert)
 
 
-features = ['cast',  'crew', 'genres','keywords','title']
+features = ['cast',  'crew', 'genres','keywords','title','production_companies']
 for feature in features:
     movies_sel[feature] = movies_sel[feature].apply(clean_data)
 
 
-movies_sel["combo_list"] =   movies_sel["genres"]+ movies_sel["keywords"]+ movies_sel["cast"]+ movies_sel["crew"]
+movies_sel["combo_list"] =   movies_sel["genres"]+ movies_sel["keywords"]+ movies_sel["cast"]+ movies_sel["crew"]#+movies_sel['production_companies']
 
 movies_sel["combo_list"] =movies_sel["combo_list"].apply(lambda x: " ".join((x)))
 
