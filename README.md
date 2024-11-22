@@ -1,6 +1,6 @@
 # Movie Recommendation Engine
 
-A machine learning-based recommendation system using the MovieLens 100K dataset, implementing multiple recommendation approaches.
+A machine learning-based recommendation system using the MovieLens 100K dataset and KMDB 5000 dataset implementing multiple recommendation approaches.
 
 ## Overview
 
