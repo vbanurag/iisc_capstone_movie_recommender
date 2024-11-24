@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 class SVDMovieRecommendation:
     def __init__(self, data_path):
@@ -115,3 +116,50 @@ class SVDMovieRecommendation:
                 print([self.unique_movies[self.case_insensitive_movies_list.index(m)] for m in possible_movies])
                 print()
                 self.recommender()
+    
+     def test_model(self, test_size=0.2):
+        # Split dataset into train and test
+        test_data = self.refined_dataset.sample(frac=test_size, random_state=42)
+        train_data = self.refined_dataset.drop(test_data.index)
+
+        # Create utility matrix for the training set
+        train_utility_matrix = np.full((len(self.unique_movies), len(self.unique_users)), np.nan)
+        for _, row in train_data.iterrows():
+            movie_index = self.movies_dict[row['movie title']]
+            user_index = row['user id'] - 1
+            train_utility_matrix[movie_index, user_index] = row['rating']
+
+        # Fill missing values with average ratings
+        train_mask = np.isnan(train_utility_matrix)
+        train_masked_arr = np.ma.masked_array(train_utility_matrix, train_mask)
+        train_rating_means = np.mean(train_masked_arr, axis=1).filled(0)
+        filled_train_matrix = train_masked_arr.filled(train_rating_means[:, np.newaxis])
+
+        # Perform SVD
+        normalized_train_matrix = filled_train_matrix - train_rating_means[:, np.newaxis]
+        U, S, Vt = np.linalg.svd(normalized_train_matrix.T / np.sqrt(len(self.movies_dict) - 1))
+
+        # Predict ratings on the test set
+        predictions = []
+        ground_truth = []
+        for _, row in test_data.iterrows():
+            user_id = row['user id'] - 1
+            movie_title = row['movie title']
+            if movie_title in self.movies_dict:
+                movie_id = self.movies_dict[movie_title]
+                predicted_rating = train_rating_means[movie_id] + np.dot(
+                    U[user_id, :50], S[:50] * Vt[:50, movie_id]
+                )
+                predictions.append(predicted_rating)
+                ground_truth.append(row['rating'])
+
+        # Calculate RMSE
+        rmse = sqrt(mean_squared_error(ground_truth, predictions))
+        mae = mean_absolute_error(ground_truth, predictions)
+
+        print(f"RMSE: {rmse:.4f}")
+        print(f"MAE: {mae:.4f}")
+
+        return rmse, mae
+
+
