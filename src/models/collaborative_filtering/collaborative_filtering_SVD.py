@@ -163,3 +163,17 @@ class SVDMovieRecommendation:
         return rmse, mae
 
 
+if __name__ == "__main__":
+    # Create an instance of the recommendation system
+    movie_recommender = SVDMovieRecommendation(data_path="data/ml-100k")
+    
+    # Train or initialize the recommender
+    movie_recommender.recommender()
+    
+    # Test the model and get evaluation metrics
+    rmse, mae = movie_recommender.test_model(test_size=0.2)
+    
+    # Print the results
+    print(f"RMSE on the test dataset: {rmse:.4f}")
+    print(f"MAE on the test dataset: {mae:.4f}")
+
