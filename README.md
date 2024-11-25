@@ -30,6 +30,11 @@ KMDB 5000 dataset containing:
 - Learns latent factors for users and items
 - Incorporates user and item biases
 
+### Collaborative Filtering(SVD)
+- item-based approach using SVD
+- Trains the model, generates predictions, and evaluates with RMSE and MAE metrics
+- Requires a dataset located at data/ml-100k to run and evaluate the model.
+
 ### Content-Based Filtering
 - Feature extraction from movie metadata
 - TF-IDF vectorization for movie descriptions
