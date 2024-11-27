@@ -30,8 +30,9 @@ KMDB 5000 dataset containing:
 ### Softmax DD
 - Learns latent factors for users and items
 - Incorporates user and item biases
-- ![Model Architecture]('https://github.com/vbanurag/iisc_capstone_movie_recommender/blob/main/notebooks/model_arch.png')
-- ![Model fit]('https://github.com/vbanurag/iisc_capstone_movie_recommender/blob/main/notebooks/model.png')
+- ![Model Architecture](notebooks/model_arch.jpg 'arch')
+- ![Model fit](notebooks/model.jpg)
+
 
 ### Collaborative Filtering (SVD)
 - item-based approach using SVD
