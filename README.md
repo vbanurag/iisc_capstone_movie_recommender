@@ -1,14 +1,15 @@
 # Movie Recommendation Engine
 
 
-A machine learning-based recommendation system using the MovieLens 100K dataset and KMDB 5000 dataset implementing multiple recommendation approaches.
+A machine learning-based recommendation system using the MovieLens 100K dataset and KMDB 5000 dataset implementing multiple recommendation approaches. 
+The solution is attempted in two ways, a) Content-based filtering, and b) Collaborative filtering. 
 
 ## Overview
 
 This project implements three different recommendation algorithms:
-- Collaborative Filtering using K-Nearest Neighbors
+- Collaborative Filtering using K-Nearest Neighbors and SVD
 - Softmax Decomposition-Discovery (DD)
-- Content-Based Filtering using Cosine Similarity
+- Content-Based Filtering using Cosine Similarity and NLP based approach
 
 ## Dataset
 
@@ -18,7 +19,7 @@ MovieLens 100K dataset containing:
 - User demographic information
 
 KMDB 5000 dataset containing:
-- 4804 movies with 23 input features inlcuding overview, genres, cast, crew, ratings
+- 4804 movies with 23 input features including overview, genres, cast, crew, ratings
 
 ## Implementation Details
 
@@ -30,12 +31,27 @@ KMDB 5000 dataset containing:
 - Learns latent factors for users and items
 - Incorporates user and item biases
 
+### Collaborative Filtering (SVD)
+- item-based approach using SVD
+- Trains the model, generates predictions, and evaluates with RMSE and MAE metrics
+- Requires a dataset located at data/ml-100k to run and evaluate the model.
+
 ### Content-Based Filtering
 - Feature extraction from movie metadata
-- TF-IDF vectorization for movie descriptions
+- TF-IDF vectorization for movie descriptions. 
+   TF-IDF and Count Vectorization is compared. TF-IDF is shown to perform better.
 - Cosine similarity for recommendations
-- Jaccard Similarity for model validation using internet data
+- Jaccard Similarity for model validation using internet data (tastedive.com)
+   For example, an average Jaccard index is computed for a set of 10 movies, and compared for different feature combinations used in the model.
+   From this result, we select a combination of overview, genres, keywords, cast and director features for the model training.
+- Algorithm seems to work well with movies that are in a series like Harry Potter, James Bond etc.
+- For Stand-alone movies, the recommendation needs further modifications.
 
+### NLP based Content-Based Filtering
+- Embedding with Universal Sentence Encoder: Movie overviews are transformed into embeddings using the Universal Sentence Encoder model.
+- Dimensionality Reduction with PCA: The high-dimensional embeddings are reduced to 2D for better visualization.
+- Visualization: The reduced embedding space is plotted using Matplotlib to provide an intuitive view.
+- Recommendation Implementation: The Nearest Neighbors algorithm is employed to recommend similar movies based on the generated embeddings.   
 
 
 ## Evaluation Metrics
@@ -112,12 +128,5 @@ If `pyenv` is installed on your system, you can also set up your environment usi
 ---
 
 
-## Dataset and Implementation Details Of NLP Methord
 
-This project implements three different recommendation algorithms:
-- Dataset Used: TMDB 5000 Movies Dataset.
-- Embedding with Universal Sentence Encoder: Movie overviews are transformed into embeddings using the Universal Sentence Encoder model.
-- Dimensionality Reduction with PCA: The high-dimensional embeddings are reduced to 2D for better visualization.
-- Visualization: The reduced embedding space is plotted using Matplotlib to provide an intuitive view.
-- Recommendation Implementation: The Nearest Neighbors algorithm is employed to recommend similar movies based on the generated embeddings.
 
