@@ -30,6 +30,7 @@ KMDB 5000 dataset containing:
 ### Softmax DD
 - Learns latent factors for users and items
 - Incorporates user and item biases
+- Uses Adagrad as a optimizer
 - ![Model Architecture](notebooks/model_arch.jpg 'arch')
 - ![Model fit](notebooks/model.jpg)
 
