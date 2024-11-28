@@ -58,18 +58,13 @@ indices_lower = pd.Series(movies_sel.index, index=movies_sel['title_lower']).dro
 def get_recommendations(title,len_recommended_movies , cosine_sim2):
         
     idx = indices_lower[title]
-
     sim_scores = list(enumerate(cosine_sim2[idx]))
-       
     # Sort the movies based on the similarity scores
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-   
     sim_scores = sim_scores[1:len_recommended_movies+1]
     movie_indices = [i[0] for i in sim_scores]
-    
     tags=[]
     for i in range(len_recommended_movies):
-        
         tags.append(movies_sel['title'].iloc[movie_indices[i]])
     # Return the topmost similar movies
     movies_recommended= movies_sel['title'].iloc[movie_indices]
@@ -132,7 +127,7 @@ def recommended_movies():
             cosine_sim3=get_cosine_sim3()
             #cosine_sim2=get_cosine_sim2()
             #Model_recommendation2=get_recommendations(movie_name.lower(),len(Benchmark_recommendation),cosine_sim+cosine_sim2)
-            Model_recommendation3=get_recommendations(movie_name.lower(),num_recommended_movies,cosine_sim+cosine_sim3)
+            Model_recommendation3=get_recommendations(movie_name.lower(),len(Benchmark_recommendation),cosine_sim+cosine_sim3)
             #print(Model_recommendation3)
             #Accuracy=jaccard_set(Benchmark_recommendation,Model_recommendation)
             #Accuracy2=jaccard_set(Benchmark_recommendation,Model_recommendation2)
